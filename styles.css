@@ -1,0 +1,1256 @@
+/**
+ * This site uses 98.css v0.1.20
+ * Copyright (c) 2020 Jordan Scales
+ * https://github.com/jdan/98.css/
+ * MIT License
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --windows-bg: #008080;
+    --window-bg: #c0c0c0;
+    --text-color: #000000;
+    --start-menu-width: 200px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'VT323', monospace;
+    background-color: var(--windows-bg);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px 20px 40px;
+}
+
+body, .taskbar, .start-button, .window, .title-bar, .menu-bar, .dock {
+    transition: all 0.3s ease;
+}
+
+.desktop {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 20px;
+    gap: 20px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+}
+
+.icon {
+    display: flex;
+    font-family: 'VT323', monospace;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    width: 80px;
+    height: 100px;
+}
+
+.icon img,
+.icon .blank-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+}
+
+.icon .blank-icon {
+    display: block;
+    flex-shrink: 0;
+}
+
+.icon span {
+    font-size: 14px;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.2;
+}
+
+.button {
+    box-sizing: border-box;
+    border: none;
+    background: silver;
+    box-shadow: inset -1px -1px #0a0a0a,
+                inset 1px 1px #fff,
+                inset -2px -2px grey,
+                inset 2px 2px #dfdfdf;
+    border-radius: 0;
+    min-width: 75px;
+    min-height: 23px;
+    padding: 0 12px;
+    font-size: 11px;
+    font-family: 'VT323', monospace;
+    color: black;
+    position: relative;
+    cursor: pointer;
+}
+
+/* window styles */
+.window {
+    display: none; 
+    position: fixed;
+    background-color: #c0c0c0;
+    border: 2px solid #ffffff;
+    box-shadow: inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+    overflow: hidden;
+    transition: none !important;
+    max-height: calc(100vh - 80px);
+    margin-bottom: 40px;
+}
+
+/* Maximized window fills the desktop, above the taskbar */
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 40px) !important;
+    max-height: calc(100vh - 40px) !important;
+    margin-bottom: 0 !important;
+    transform: none !important;
+    border-radius: 0;
+    flex-direction: column;
+}
+
+.window.maximized > .window-content,
+.window.maximized > .ie-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+  .title-bar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    width: 100% !important;
+}
+
+.title-bar-controls {
+    position: static !important;
+    margin-left: auto !important;
+    padding-left: 8px !important;
+}
+
+.title-bar .title-bar-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.title-bar * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.title-bar button {
+    box-sizing: border-box;
+    border: none;
+    background: silver;
+    box-shadow: inset -1px -1px #0a0a0a,
+                inset 1px 1px #fff,
+                inset -2px -2px grey,
+                inset 2px 2px #dfdfdf;
+    border-radius: 0;
+    min-width: 16px;
+    min-height: 14px;
+    padding: 0;
+    font-size: 9px;
+    font-family: "VT323", monospace;
+    color: black;
+    position: relative;
+    margin-left: 2px;
+}
+
+.title-bar button:not(:disabled):active {
+    box-shadow: inset -1px -1px #ffffff,
+                inset 1px 1px #0a0a0a,
+                inset -2px -2px #dfdfdf,
+                inset 2px 2px #808080;
+    padding: 1px 0 0 1px;
+}
+
+.title-bar-text {
+    flex-grow: 1;
+    pointer-events: none;
+}
+
+.window-title {
+    flex-grow: 1;
+    pointer-events: none;
+    white-space: nowrap;  
+    overflow: hidden;     
+    text-overflow: ellipsis; 
+    padding-right: 10px; 
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.window-content {
+    height: calc(100% - 30px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 10px !important;
+    max-height: calc(100vh - 120px) !important; 
+}
+
+  .window.large {
+    min-width: 600px;
+    min-height: 400px;
+  }
+
+  .window.compact {
+    min-width: 250px;
+    min-height: 150px;
+  } 
+  
+  .window-header {
+    background-color: #000080;
+    color: white;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    -webkit-user-select: none;
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    min-width: 100%;
+    box-sizing: border-box;
+
+  }
+
+  .window.dragging {
+    max-width: 90vw !important;
+    max-height: 80vh !important;
+  }
+
+.subwindow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: #c0c0c0;
+    border: 2px outset #ffffff;
+    display: none;
+    z-index: 1100;
+}
+
+.subwindow-header {
+    background-color: #000080;
+    color: white;
+    font-family: 'VT323', monospace;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subwindow-content {
+    background-color: white;
+    border: 1px inset #808080;
+    font-family: 'VT323', monospace;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.subwindow-header button.close-btn {
+    background-color: silver;
+    color: black;
+    box-shadow: inset -1px -1px #0a0a0a,
+                inset 1px 1px #fff,
+                inset -2px -2px grey,
+                inset 2px 2px #dfdfdf;
+    min-width: 16px;
+    min-height: 14px;
+    font-size: 9px;
+    padding: 0;
+    margin-left: 2px;
+}
+
+.subwindow-header button.close-btn:active {
+    box-shadow: inset -1px -1px #ffffff,
+                inset 1px 1px #0a0a0a,
+                inset -2px -2px #dfdfdf,
+                inset 2px 2px #808080;
+    padding: 1px 0 0 1px;
+}
+/* about window styles */
+.about-window {
+    min-width: 500px;
+    min-height: 400px;
+}
+
+.about-window .window-content {
+    display: block;
+    padding: 0;
+    overflow: auto;
+}
+ 
+/* computer folder styles */
+.computer-folder {
+    height: 100%;
+    background-color: white;
+    padding: 10px;
+}
+
+.folder-header {
+    background-color: #c0c0c0;
+    padding: 5px 10px;
+    border-bottom: 1px solid #808080;
+}
+
+.folder-title {
+    font-weight: bold;
+}
+
+.folder-view {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Changed from auto-fit to fixed 3 columns */
+    gap: 15px;
+    padding: 15px;
+}
+
+.folder-icon {
+    min-height: min-content; /* Ensures content is fully visible */
+    height: auto;
+}
+
+.folder-icon:hover {
+    background-color: #e8e8e8;
+}
+
+.folder-icon img {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+}
+
+.icon-label {
+    font-size: 12px;
+    max-width: 80px;
+    word-wrap: break-word;
+}
+
+/* list Styles */
+.skill-list {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.skill-list ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.skill-list,
+.project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.skill-list li,
+.project-list li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.skill-list li:last-child,
+.project-list li:last-child {
+    border-bottom: none;
+}
+
+/* Contact Form Styles */
+/* Contact Form Styles */
+.contact-info {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-family: 'VT323', monospace;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 5px;
+    border: 2px inset #ffffff;
+    background-color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+}
+
+.form-group input {
+    height: 30px;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Updated Status Message Styles */
+.form-status {
+    display: none;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: 'VT323', monospace;
+    border: 2px solid;
+    background-color: #c0c0c0;
+}
+
+.form-status.success {
+    display: block;
+    border-style: inset;
+    background-color: #c0c0c0;
+    color: #008000;
+    font-weight: bold;
+}
+
+.form-status.error {
+    display: block;
+    border-style: inset;
+    background-color: #c0c0c0;
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.honeypot-field {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Subject Button Styles */
+.subject-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.subject-btn {
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    min-width: 80px;
+}
+
+.subject-btn:hover {
+    box-shadow: 1px 1px 0px #000000;
+}
+
+.subject-btn.active {
+    border-style: inset;
+    background-color: #d4d0c8;
+    box-shadow: inset 1px 1px 0px #000000;
+}
+
+.submit-btn {
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    min-width: 80px;
+}
+
+.submit-btn:hover {
+    box-shadow: 1px 1px 0px #000000;
+}
+
+.submit-btn:active {
+    border-style: inset;
+    box-shadow: inset 1px 1px 0px #000000;
+}
+
+.submit-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    border-style: inset;
+}
+
+/* windows 95 */
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #000080;
+}
+
+/* error state */
+.form-group input:invalid:focus,
+.form-group textarea:invalid:focus {
+    border-color: #ff0000;
+}
+
+/* Taskbar Styles */
+.taskbar {
+    background-color: var(--window-bg);
+    border-top: 2px solid #ffffff;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+}
+
+.start-button {
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.taskbar-clock {
+    background-color: var(--window-bg);
+    border: 2px inset #ffffff;
+    padding: 2px 5px;
+    font-size: 16px;
+    min-width: 85px;
+    text-align: center;
+}
+
+/* Taskbar buttons for open windows (Windows-style) */
+.dock {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 4px;
+    margin: 0 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 0;
+}
+
+.taskbar-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex: 0 1 160px;
+    min-width: 90px;
+    max-width: 160px;
+    height: 28px;
+    padding: 2px 8px;
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    border-radius: 0;
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.taskbar-button span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.taskbar-button.active {
+    border-style: inset;
+    background-color: #dcdcdc;
+    font-weight: bold;
+}
+
+/* Start Menu Styles */
+.start-menu {
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    font-family: 'VT323', monospace;
+    width: var(--start-menu-width);
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    border-bottom: none;
+    box-shadow: 2px -2px #808080;
+    display: none;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.start-menu a {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.start-menu a span {
+    position: relative;
+}
+
+.start-menu a span::first-letter {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.start-menu a:hover {
+    background-color: var(--window-header);
+    color: white;
+}
+
+.start-menu img,
+.start-menu .blank-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.start-menu .blank-icon {
+    display: block;
+    flex-shrink: 0;
+}
+
+.start-menu-footer {
+    border-top: 1px solid #808080;
+    padding: 5px 0;
+}
+
+/* Shut Down Dialog Styles */
+.shut-down-option {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.shut-down-option:hover {
+    background-color: var(--window-header);
+    color: white;
+}
+
+.shut-down-option img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.shut-down-dialog {
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    font-family: 'VT323', monospace;
+    z-index: 9999;
+    width: 300px;
+    max-width: 90%;
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+    outline: 3px solid red;
+    min-height: 200px;
+}
+
+.shut-down-dialog .window-header {
+    background-color: var(--window-header);
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+.shut-down-dialog .window-content {
+    padding: 20px;
+}
+
+.shut-down-dialog p {
+    margin-bottom: 15px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.button-group button {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: var(--window-bg);
+    border: 2px outset #ffffff;
+    cursor: pointer;
+}
+
+.button-group button:active {
+    border-style: inset;
+}
+
+.shut-down-btn {
+    width: 80px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+/* Friendster Styles */
+.friendster-window {
+    width: 800px;
+    height: 600px;
+}
+
+.friendster-window .window-content {
+    display: block;
+    padding: 0;
+    overflow: auto;
+    background: white;
+}
+
+.friendster-profile {
+    padding: 20px;
+    height: 100%;
+    background-color: #ffffff;
+    font-family: 'VT323', monospace;
+}
+
+/* IE Toolbar */
+.ie-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+}
+
+.ie-btn {
+    padding: 2px 8px;
+    margin-right: 4px;
+    background-color: #c0c0c0;
+    border: 2px outset #ffffff;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+}
+
+.ie-btn:disabled {
+    color: #808080;
+    cursor: not-allowed;
+}
+
+.ie-btn:active:not(:disabled) {
+    border-style: inset;
+}
+
+.ie-address-bar {
+    flex-grow: 1;
+    margin: 0 4px;
+    padding: 2px 4px;
+    border: 2px inset #ffffff;
+    background-color: #ffffff;
+    font-family: 'VT323', monospace;
+}
+
+.ie-icon {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.friendster-header {
+    margin-bottom: 30px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 48px;  
+    height: 48px;  
+    object-fit: cover; 
+    border: 2px solid #000080;
+    margin-right: 20px;
+    border-radius: 50%; 
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000080;
+    margin: 0 0 10px 0;
+}
+
+.profile-stats {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.stat-item {
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #000080;
+    margin-right: 8px;
+}
+
+/* Profile Sections */
+.profile-section {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+.section-title {
+    font-size: 18px;
+    color: #000080;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #000080;
+}
+
+.section-content {
+  line-height: 1.6;
+}
+
+/* Interests List */
+.interests-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.interests-list li {
+  padding: 5px 0;
+  border-bottom: 1px dotted #ddd;
+}
+
+.interests-list li:last-child {
+  border-bottom: none;
+}
+
+/* Friends Grid */
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.friend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.friend-item img {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+.friend-name {
+  font-size: 12px;
+  color: #000080;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Update List Styles for Services */
+.services-window ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.services-window li {
+  margin-bottom: 10px;
+}
+
+/* Update List Styles for Referrals */
+.referrals-window ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.referrals-window li {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.referrals-window li:last-child {
+  border-bottom: none;
+}
+
+  
+#learningWindow {
+    transition: none !important;
+}
+  
+#gameWindow {
+    width: 400px;    
+    height: 500px;    
+    min-width: 400px;
+    min-height: 300px;
+    background: black;
+}
+
+#gameWindow .window-content {
+    height: calc(100% - 30px) !important; /* 30px for title bar */
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: black;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.game-interface {
+    height: 300px !important; /* Set this to match your game UI height */
+    background: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+#gameWindow iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: black;
+}
+
+#contactWindow {
+    min-width: 350px;
+    min-height: 400px; /* taller for contact form */
+  }
+
+
+  #cryptoWindow {
+    width: 350px;
+    height: auto;
+    min-height: 300px;
+}
+
+#cryptoPrices {
+    padding: 15px;
+    font-family: 'VT323', monospace;
+}
+
+.crypto-item {
+    border: 2px inset #fff;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: white;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.crypto-item strong {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.price-up {
+    color: #008000;
+    font-weight: bold;
+}
+
+.price-down {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.refresh-btn {
+    margin: 10px;
+    padding: 8px 15px;
+    background: silver;
+    border: 2px outset #fff;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+}
+
+.refresh-btn:active {
+    border-style: inset;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+}
+
+#aboutWindow {
+    width: 400px;
+    min-height: 450px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .window {
+        width: 92% !important;
+        height: auto !important;
+        max-height: calc(100vh - 100px) !important;
+        margin-bottom: 60px;
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        margin: 0 !important;
+    }
+
+    #learningWindow {
+        width: 380px !important;
+        height: 700px !important;
+        max-width: 380px !important;
+        max-height: 700px !important;
+    }
+
+    #learningWindow .window-content {
+        height: calc(100% - 25px) !important;
+        padding: 12px !important;
+        overflow-y: auto !important;
+    }
+
+    #cryptoWindow {
+        width: 92% !important;
+        min-height: auto !important;
+        max-height: 80vh !important;
+    }
+
+    #cryptoWindow .window-content {
+        height: auto !important;
+        min-height: 200px;
+        max-height: calc(80vh - 40px) !important;
+        overflow-y: auto !important;
+    }
+
+    .crypto-item {
+        padding: 10px;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .crypto-item strong {
+        font-size: 16px;
+    }
+
+    .refresh-btn {
+        width: calc(100% - 20px); 
+        margin: 10px;
+        text-align: center;
+    }
+
+    .folder-view {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    #gameWindow {
+        width: 100% !important;
+        height: auto !important; 
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        max-height: 400px !important; 
+    }
+
+    #gameWindow .window-content {
+        height: calc(100% - 30px) !important;
+        max-height: 370px !important; 
+    }
+
+    #projectsWindow {
+        width: 92% !important;
+        height: auto !important;
+        min-height: 300px;
+        max-height: 80vh !important;
+    }
+
+    #projectsWindow .project-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .project-item {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    #gameWindow {
+        max-height: 400px !important; 
+    }
+
+    #gameWindow .window-content {
+        height: 370px !important;
+    }
+}
+
+/* ============================================================
+   MySpace-style "Current Favorites" page (pink & sparkly)
+   ============================================================ */
+.myspace-profile {
+    padding: 18px;
+    min-height: 100%;
+    font-family: 'VT323', monospace;
+    color: #6d2060;
+    background-color: #ffd9ec;
+    background-image: url("icons/sparkle-bg.gif");
+    background-repeat: repeat;
+    background-attachment: fixed;
+}
+
+.myspace-container {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.myspace-header {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #ff2d92;
+    padding: 10px;
+    margin-bottom: 18px;
+    background: linear-gradient(90deg, #ff8fcf, #ffc8e8, #ff8fcf);
+    border: 3px double #ff2d92;
+    border-radius: 12px;
+    text-shadow: 1px 1px 0 #fff, 0 0 6px #ffb3de;
+}
+
+.myspace-profile .profile-header {
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.myspace-profile .profile-pic {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #ff2d92;
+    box-shadow: 0 0 10px #ff8fcf;
+    margin-right: 0;
+}
+
+.myspace-profile .profile-name {
+    color: #ff2d92;
+    font-size: 26px;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.profile-mood {
+    font-size: 18px;
+    color: #a83a8e;
+}
+
+.ms-section {
+    background: #fff0f8;
+    border: 2px solid #ff8fcf;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 0 2px #ffe2f2, 2px 2px 6px rgba(255, 45, 146, 0.2);
+}
+
+.ms-section-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ff2d92;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px dashed #ff8fcf;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.ms-list {
+    margin: 0;
+    padding-left: 26px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #6d2060;
+}
+
+.ms-list li {
+    margin-bottom: 4px;
+}
+
+.ms-list li::marker {
+    color: #ff2d92;
+}
+
+.ms-updated {
+    text-align: center;
+    font-size: 13px;
+    color: #b85aa0;
+    margin-top: 18px;
+    font-style: italic;
+}
